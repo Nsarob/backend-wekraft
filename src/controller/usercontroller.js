@@ -9,7 +9,6 @@ import sendLoginEmail from "../utiles/loginmessage.js";
 class userController{
      static async signup(req,res){
         const {firstname,lastname,email,password,confirmpassword,role}=req.body
-      
          
         try {
             if(req.body.password !== req.body.confirmpassword){
@@ -17,8 +16,9 @@ class userController{
             }else{
                 const hashpassword=bcrypt.hashSync(req.body.password,10)
                 const hashconfirmpassword=bcrypt.hashSync(req.body.confirmpassword,10)
+                console.log("ecrptd passwd:"+ hashconfirmpassword)
 
-                const user= await User.create({firstname,lastname,dateofBirth,email,password:hashpassword,confirmpassword:hashconfirmpassword,role})
+                const user= await User.create({firstname,lastname,email,password:hashpassword,confirmpassword:hashconfirmpassword,role})
                 if(!user){
                     return errormessage(res,400,'user not created')
                 }else{
