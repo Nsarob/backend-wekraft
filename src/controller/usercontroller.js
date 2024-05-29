@@ -42,7 +42,7 @@ class userController{
             if(!comparepassword){
                 return errormessage(res,401,'invalid email or password')
             }else{
-               const token=jwt.sign({user:user},process.env.SCRET_KEY,{expiresIn:"1d"})
+               const token=jwt.sign({user:user},process.env.SECRET_KEY,{expiresIn:"1d"})
                sendLoginEmail(user)
                return res.status(200).json({
                 token:token,
