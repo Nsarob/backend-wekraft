@@ -9,8 +9,12 @@ import path from 'path';
 dotenv.config();
 
 const app = express();
+const corsOptions = { 
 
-app.use(cors());
+  origin: 'https://wekraft.org'
+
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
