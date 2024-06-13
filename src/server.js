@@ -20,6 +20,7 @@ console.log("PORT:", process.env.PORT);
 console.log("DATABASE:", process.env.DATABASE);
 console.log("SECRET_KEY:", process.env.SECRET_KEY);
 
+
 const app = express();
 const corsOptions = {
   origin: '*', // https://wekraft.org/

@@ -8,8 +8,8 @@ import User from "../model/user.js"
 
 class productController{
     static async postProduct(req, res) {
+        console.log("file path: ",req.file.path)
         try {
-         
           if (!req.file) {
             return errormessage(res, 400, 'Please upload a product image.');
           }
@@ -18,6 +18,7 @@ class productController{
           const result = await cloudinary.uploader.upload(req.file.path, {
             folder: 'product',
           });
+          console.log("Cloudnary results: ",result)
           const product = await Product.create({
             productImage: {
               public_id: result.public_id,
