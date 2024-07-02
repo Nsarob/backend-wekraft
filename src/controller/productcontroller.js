@@ -6,41 +6,45 @@ import sucessmessage from "../utiles/successmessage.js"
 import productemail from "../utiles/productemail.js"
 import User from "../model/user.js"
 
-class productController{
+class productController {
     static async postProduct(req, res) {
         try {
-         
-          if (!req.file) {
-            return errormessage(res, 400, 'Please upload a product image.');
-          }
-    
-          
-          const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'product',
-          });
-          const product = await Product.create({
-            productImage: {
-              public_id: result.public_id,
-              url: result.secure_url,
-            },
-            productName: req.body.productName,
-            quantityAvailable: req.body.quantityAvailable,
-            serialNumber: req.body.serialNumber,
-            productPrice: req.body.productPrice,
-          });
-          if (!product) {
-            return errormessage(res, 500, 'Failed to create product.');
-          }
-          const user=await User.find()
-          user.map((users)=>{
-            productemail(users,product)
-          })
-          return sucessmessage(res, 201, 'Product successfully posted', product);
+            if (!req.file) {
+                console.error('File not uploaded');
+                return errormessage(res, 400, 'Please upload a product image.');
+            }
+
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: 'product' });
+            console.log("Cloudinary results:", result);
+
+            const product = await Product.create({
+                productImage: {
+                    public_id: result.public_id,
+                    url: result.secure_url,
+                },
+                productName: req.body.productName,
+                quantityAvailable: req.body.quantityAvailable,
+                serialNumber: req.body.serialNumber,
+                productPrice: req.body.productPrice,
+            });
+            console.log("Product created:", product);
+
+            if (!product) {
+                console.error('Failed to create product');
+                return errormessage(res, 500, 'Failed to create product.');
+            }
+
+            const user = await User.find();
+            user.map((users) => {
+                productemail(users, product);
+            });
+
+            return sucessmessage(res, 201, 'Product successfully posted', product);
         } catch (error) {
-          console.error('Error:', error);
-          return errormessage(res, 500, `Error: ${error.message}`);
+            console.error('Error:', error);
+            return errormessage(res, 500, `Error: ${error.message}`);
         }
-      }
+    }
 
     
 
